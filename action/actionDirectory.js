@@ -3,10 +3,12 @@
     actionDirectory.js
 */
 
- var util = require('util'),
-     logger = require('.././logger'),
-     lights = require('.././hueWrapper'),
-     actionRunner = require('.././hueWrapper');
+var util = require('util');
+var logger = require('.././logger');
+var lights = require('.././hueWrapper');
+var actionRunner = require('.././hueWrapper');
+var state = require('.././state');
+
 
 (function(context) {
 
@@ -26,6 +28,8 @@
     }
     SimpleLightAction.prototype = new Action();
     SimpleLightAction.prototype.run = function() {
+        state.saveTime(this.lightName, "activateTime");
+
         logger.i(util.format("Running SimpleLightAction action: %s", this.lightAction));
         lights.getLightByName(this.lightName)[this.lightAction]();
     };

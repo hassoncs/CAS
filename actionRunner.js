@@ -23,14 +23,11 @@ var _ = require('underscore'),
     }
 
     function init() {
-        //ENTRANCE_MOTION_INACTIVE
         addAction(Events.ENTRANCE_MOTION_ACTIVE, new ActionDirectory.SimpleLightAction("Stairs Bottom", 'on'));
-        addAction(Events.ENTRANCE_MOTION_ACTIVE, new ActionDirectory.DelayedAction(
-            new ActionDirectory.SimpleLightAction("Stairs Bottom", 'off'), 60000));
+        addAction(Events.ENTRANCE_MOTION_INACTIVE, new ActionDirectory.SimpleLightAction("Stairs Bottom", 'off'));
     }
 
     function addAction(eventId, action) {
-        ACTIONS = ACTIONS || {};
         var actions = ACTIONS[eventId];
 
         actions = actions || [];
