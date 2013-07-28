@@ -12,6 +12,7 @@ var util = require('util'),
         return "_" + arbitraryCounter++;
     }
 
-    exports.TURN_ON_ENTRANCE_LIGHT = next();
-    
+    exports.ENTRANCE_MOTION_ACTIVE = next();
+    exports.ENTRANCE_MOTION_INACTIVE = next();
+
 })(exports);

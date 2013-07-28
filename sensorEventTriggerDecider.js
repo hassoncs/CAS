@@ -13,29 +13,31 @@
 (function(context) {
 
     var SENSOR_TRIGGERS = [
-        //new Trigger("C2", "turnOnBottomStairLight"),
-        new Trigger("roomEntranceMotion", Events.TURN_ON_ENTRANCE_LIGHT)
+        new SensorTrigger("roomEntranceMotion", Events.ENTRANCE_MOTION_ACTIVE, "active"),
+        new SensorTrigger("roomEntranceMotion", Events.ENTRANCE_MOTION_INACTIVE, "inactive")
     ];
 
     function Trigger() {}
     Trigger.prototype.fire = function() { /* noop */ };
     Trigger.prototype.shouldFire = function() { return false; };
 
-    SensorTrigger.prototype = new Trigger();
-    function SensorTrigger(sensor, eventId) {
+
+
+    function SensorTrigger(sensor, eventIdToFire, state) {
         Trigger.call(this);
         this.sensor = sensor;
-        this.eventId = eventId;
+        this.eventIdToFire = eventIdToFire;
+        this.state = state;
     }
+    SensorTrigger.prototype = new Trigger();
     SensorTrigger.prototype.shouldFire = function(query) {
-        var sensor = query.sensor || "";
+        var sensor = query.sensor;
         var state = query.state;
-
-        return (this.sensor == sensor) && (!state && state == "active");
+        return (this.sensor == sensor) && (this.state == state);
     };
     SensorTrigger.prototype.fire = function() {
-        logger.i("Sensor Triggered Event: " + this.eventId);
-        Facade.handleEvent(this.eventId);
+        logger.i("Sensor Triggered Event: " + this.eventIdToFire);
+        Facade.handleEvent(this.eventIdToFire);
     };
 
 
@@ -46,12 +48,12 @@
 
     function sensorMatches(query) {
         var triggersToFire = _.filter(SENSOR_TRIGGERS, function(trigger) {
-            return trigger.shouldFire(query);
+            return SensorTrigger.prototype.shouldFire.call(trigger, query);
         });
 
         logger.i("sensorMatches: " + util.inspect(triggersToFire));
         _.each(triggersToFire, function(trigger) {
-            trigger.fire();
+            SensorTrigger.prototype.fire.call(trigger);
         });
     }
 

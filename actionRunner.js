@@ -23,9 +23,10 @@ var _ = require('underscore'),
     }
 
     function init() {
-        addAction(Events.TURN_ON_ENTRANCE_LIGHT, new ActionDirectory.TurnOnLightAction("Stairs Bottom"));
-        addAction(Events.TURN_ON_ENTRANCE_LIGHT, new ActionDirectory.DelayedAction(
-            new ActionDirectory.TurnOffLightAction("Stairs Bottom"), 60000));
+        //ENTRANCE_MOTION_INACTIVE
+        addAction(Events.ENTRANCE_MOTION_ACTIVE, new ActionDirectory.SimpleLightAction("Stairs Bottom", 'on'));
+        addAction(Events.ENTRANCE_MOTION_ACTIVE, new ActionDirectory.DelayedAction(
+            new ActionDirectory.SimpleLightAction("Stairs Bottom", 'off'), 60000));
     }
 
     function addAction(eventId, action) {

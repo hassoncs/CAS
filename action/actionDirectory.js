@@ -17,30 +17,17 @@
         logger.i(util.format("Running action %s!", this.actionType));
     };
 
-
-
-    function TurnOnLightAction(lightName) {
+    function SimpleLightAction(lightName, lightAction) {
         Action.call(this);
-        this.actionType = "TurnOnLightAction";
+        this.actionType = "SimpleLightAction";
         this.lightName = lightName;
-        logger.i('TurnOnLightAction constructor for lightName: ' + lightName);
+        this.lightAction = lightAction;
+        logger.i('SimpleLightAction constructor for lightName: ' + lightName);
     }
-    TurnOnLightAction.prototype = new Action();
-    TurnOnLightAction.prototype.run = function() {
-        logger.i(util.format("Running TurnOnLightAction %s!", this.lightName));
-        lights.getLightByName(this.lightName).on();
-    };
-
-    function TurnOffLightAction(lightName) {
-        Action.call(this);
-        this.actionType = "TurnOffLightAction";
-        this.lightName = lightName;
-        logger.i('TurnOffLightAction constructor for lightName: ' + lightName);
-    }
-    TurnOffLightAction.prototype = new Action();
-    TurnOffLightAction.prototype.run = function() {
-        logger.i(util.format("Running TurnOffLightAction %s!", this.lightName));
-        lights.getLightByName(this.lightName).off();
+    SimpleLightAction.prototype = new Action();
+    SimpleLightAction.prototype.run = function() {
+        logger.i(util.format("Running SimpleLightAction action: %s", this.lightAction));
+        lights.getLightByName(this.lightName)[this.lightAction]();
     };
 
 
@@ -63,8 +50,7 @@
 
 
     context.Action = Action;
-    context.TurnOnLightAction = TurnOnLightAction;
-    context.TurnOffLightAction = TurnOffLightAction;
+    context.SimpleLightAction = SimpleLightAction;
     context.DelayedAction = DelayedAction;
 
 })(exports);
