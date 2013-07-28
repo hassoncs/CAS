@@ -32,7 +32,7 @@ var Light = hue.Light;
     var entranceLightGroup = new LightGroup("entrance", ["Stairs Bottom", "Stairs Top", "Hallway"]);
     var bedroomLightGroup = new LightGroup("bedroom", ["Bedroom Main", "Bedroom Window", "Bedroom Spotlight"]);
 
-    context.WelcomeHomeScene = new Scene([
+    context.WelcomeHome = new Scene([
         new LightAction(new Light("Stairs Bottom"), new ColorBrightnessLightCommand(Color.randomColor(), 100, 1)),
         new LightAction(new Light("Stairs Top"), new ColorBrightnessLightCommand(Color.randomColor(), 100, 3)),
         new LightAction(new Light("Hallway"), new ColorBrightnessLightCommand(Color.randomColor(), 100, 5)),
