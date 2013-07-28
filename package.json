@@ -1,13 +1,12 @@
 {
-  "name": "la-la-automation-server",
-  "description": "La La Automation Server",
-  "version": "0.0.1",
-  "private": true,
-  "dependencies": {
-    "express": "3.x",
-    "node-hue-api": "0.2.x",
-    "underscore": "1.5.x",
-    "redis": "0.8.4",
-    "socket.io": "0.9.x"
-  }
+    "name": "la-la-automation-server",
+    "description": "La La Automation Server",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "express": "3.x",
+        "node-hue-api": "0.2.x",
+        "underscore": "1.5.x",
+        "logging": "2.x"
+    }
 }

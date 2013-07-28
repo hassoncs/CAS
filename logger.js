@@ -1,12 +1,12 @@
 var fs = require('fs');
+var logging = require('logging');
 
 (function(context) {
-    var LOG_FILE_NAME = '/tmp/automationTest.log';
+    var LOG_FILE_NAME = '/tmp/automation.log';
+    var log = logging.from(LOG_FILE_NAME);
 
     context.i = function(data) {
-        var msg = data + '\n';
-        fs.appendFileSync(LOG_FILE_NAME, msg);
-        console.log(data);
+        log(data);
     };
 
 })(exports);
