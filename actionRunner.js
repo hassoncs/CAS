@@ -2,12 +2,15 @@
     actionRunner
 */
 
-var _ = require('underscore'),
-    util = require('util'),
-    logger = require('./logger'),
-    lights = require('./hueWrapper'),
-    ActionDirectory = require('./action/actionDirectory'),
-    Events = require('./events');
+var _ = require('underscore');
+var util = require('util');
+var logger = require('./logger');
+var Lights = require('./hueWrapper');
+var Actions = require('./action/actionDirectory');
+var Events = require('./events');
+var Light = Lights.Light;
+var LightAction = Actions.LightAction;
+ var DelayedAction = Actions.DelayedAction;
 
 (function(context) {
 
@@ -23,9 +26,9 @@ var _ = require('underscore'),
     }
 
     function init() {
-        addAction(Events.BATHROOM_MOTION_ACTIVE, new ActionDirectory.SimpleLightAction("Toilet", 'on'));
-        addAction(Events.ENTRANCE_MOTION_ACTIVE, new ActionDirectory.SimpleLightAction("Stairs Bottom", 'on'));
-        addAction(Events.ENTRANCE_MOTION_INACTIVE, new ActionDirectory.SimpleLightAction("Stairs Bottom", 'off'));
+        addAction(Events.ENTRANCE_MOTION_ACTIVE, new LightAction(new Light("Stairs Bottom"), new Lights.OnLightCommand()));
+        addAction(Events.ENTRANCE_MOTION_ACTIVE, new DelayedAction(
+            LightAction(new Light("Stairs Bottom"), new Lights.OffLightCommand()), 60000));
     }
 
     function addAction(eventId, action) {

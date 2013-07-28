@@ -1,14 +1,12 @@
-
- /*
-    actionDirectory.js
+/*
+   actionDirectory.js
 */
 
+var _ = require('underscore');
 var util = require('util');
 var logger = require('.././logger');
 var lights = require('.././hueWrapper');
-var actionRunner = require('.././hueWrapper');
 var state = require('.././state');
-
 
 (function(context) {
 
@@ -19,22 +17,21 @@ var state = require('.././state');
         logger.i(util.format("Running action %s!", this.actionType));
     };
 
-    function SimpleLightAction(lightName, lightAction) {
+    function LightAction(light, lightCommands) {
         Action.call(this);
-        this.actionType = "SimpleLightAction";
-        this.lightName = lightName;
-        this.lightAction = lightAction;
-        logger.i('SimpleLightAction constructor for lightName: ' + lightName);
+        this.actionType = "LightAction";
+        this.light = light;
+        this.lightCommands = lightCommands;
+        if (!_.isArray(lightCommands)) {
+            this.lightCommands = [lightCommands];
+        }
     }
-    SimpleLightAction.prototype = new Action();
-    SimpleLightAction.prototype.run = function() {
-//        state.saveTime(this.lightName, "activateTime");
-
-        logger.i(util.format("Running SimpleLightAction action: %s", this.lightAction));
-        lights.getLightByName(this.lightName)[this.lightAction]();
+    LightAction.prototype = new Action();
+    LightAction.prototype.run = function() {
+        state.saveTime(this.name, "activateTime");
+        logger.i("running action on light: " + this.light.name);
+        this.light.act(this.lightCommands);
     };
-
-
 
     function DelayedAction(actionToRun, delay) {
         Action.call(this);
@@ -52,9 +49,8 @@ var state = require('.././state');
         }, this.delay);
     };
 
-
     context.Action = Action;
-    context.SimpleLightAction = SimpleLightAction;
+    context.LightAction = LightAction;
     context.DelayedAction = DelayedAction;
 
 })(exports);

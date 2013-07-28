@@ -15,23 +15,124 @@ var _ = require('underscore'),
         lightArray,
         lightNamesToIds;
 
-
     function Light(lightName) {
-        this.lightId = lightNamesToIds[lightName];
-        this.on = function() {
-            hueApi
-                .setLightState(this.lightId, lightState.create().on())
-                .done();
-        };
-        this.off = function() {
-            hueApi
-                .setLightState(this.lightId, lightState.create().off())
-                .done();
-        };
+        this.name = lightName;
+    }
+    Light.prototype.act = function(commands) {
+        if (!_.isArray(commands))  {
+            commands = [commands];
+        }
+
+        var lightId = lightNamesToIds[this.name];
+        _.each(commands, function(command) {
+            command.execute(lightId);
+        });
+    }
+
+    function LightGroup(groupName, lightNames) {
+        this.name = groupName;
+        this.lightNames = lightNames;
+    }
+    LightGroup.prototype.act = function(commands) {
+        if (!_.isArray(commands))  {
+            commands = [commands];
+        }
+
+        logger.i("running commands on light group: " + this.name);
+        _.each(this.lightNames, function(lightName) {
+            var lightId = lightNamesToIds[lightName];
+            _.each(commands, function(command) {
+                command.execute(lightId);
+            });
+        });
+    }
+
+    function LightCommand() {}
+    LightCommand.prototype.execute = function(lightId) {
+        logger.i(util.format('Executing light command on light: %s', lightArray[lightId].name));
+    }
+
+    function OnLightCommand(transition) {
+        LightCommand.call(this);
+        this.transition = transition || 0;
+    }
+    OnLightCommand.prototype = new LightCommand();
+    OnLightCommand.prototype.execute = function(lightId) {
+        LightCommand.prototype.execute(lightId);
+        hueApi
+            .setLightState(lightId, lightState.create()
+                .on()
+                .transition(this.transition))
+            .done();
     }
 
 
-    function doHueBridgeInfoReceived(hueBridges) {
+    function OffLightCommand(transition) {
+        LightCommand.call(this);
+        this.transition = transition || 0;
+    }
+    OffLightCommand.prototype = new LightCommand();
+    OffLightCommand.prototype.execute = function(lightId) {
+        LightCommand.prototype.execute(lightId);
+        hueApi
+            .setLightState(lightId, lightState.create()
+                .off()
+                .transition(this.transition))
+            .done();
+    }
+
+    function ColorLightCommand(color, transition) {
+        LightCommand.call(this);
+        this.color = color;
+        this.transition = transition || 0;
+    }
+    ColorLightCommand.prototype = new LightCommand();
+    ColorLightCommand.prototype.execute = function(lightId) {
+        LightCommand.prototype.execute(lightId);
+        hueApi
+            .setLightState(this.lightId, lightState.create()
+                .on()
+                .rgb(this.color.r, this.color.g, this.color.b)
+                .transition(this.transition))
+            .done();
+    }
+
+    /** Brightness 0-100. */
+    function BrightnessLightCommand(brightness, transition) {
+        LightCommand.call(this);
+        this.brightness = brightness;
+        this.transition = transition || 0;
+    }
+    BrightnessLightCommand.prototype = new LightCommand();
+    BrightnessLightCommand.prototype.execute = function(lightId) {
+        LightCommand.prototype.execute(lightId);
+        hueApi
+            .setLightState(lightId, lightState.create()
+                .on()
+                .brightness(this.brightness)
+                .transition(this.transition))
+            .done();
+    }
+
+    function ColorBrightnessLightCommand(color, brightness, transition) {
+        LightCommand.call(this);
+        this.color = color;
+        this.brightness = brightness;
+        this.transition = transition || 0;
+    }
+    ColorBrightnessLightCommand.prototype = new LightCommand();
+    ColorBrightnessLightCommand.prototype.execute = function(lightId) {
+        LightCommand.prototype.execute(lightId);
+        hueApi
+            .setLightState(lightId, lightState.create()
+                .on()
+                .rgb(this.color.r, this.color.g, this.color.b)
+                .brightness(this.brightness)
+                .transition(this.transition))
+            .done();
+    }
+
+    function hueBridgeInfoReceived(hueBridges) {
         logger.i('Bridge Info Received!');
         logger.i(util.format('%d Hue Bridges Found: %s', hueBridges.length, util.inspect(hueBridges)));
         hueBridgeInfo = hueBridges[0];
@@ -87,13 +188,20 @@ var _ = require('underscore'),
     function init() {
         logger.i('Fetching Bridge Info!');
         hue.locateBridges()
-            .then(doHueBridgeInfoReceived)
+            .then(hueBridgeInfoReceived)
             .done();
     }
 
     exports.init = init;
     exports.turnOnAllLights = turnOnAllLights;
     exports.getLightByName = getLightByName;
+    exports.Light = Light;
+    exports.LightGroup = LightGroup;
+    exports.OnLightCommand = OnLightCommand;
+    exports.OffLightCommand = OffLightCommand;
+    exports.ColorLightCommand = ColorLightCommand;
+    exports.BrightnessLightCommand = BrightnessLightCommand;
+    exports.ColorBrightnessLightCommand = ColorBrightnessLightCommand;
 })(exports);
 
 
