@@ -1,22 +1,21 @@
  /*
-    sensorWrapper
+    sensorNameMap
 */
 
 (function(context) {
+
     var SENSOR_NAME_MAP = {
-        "C1": "",
-        "C2": "StairsBottom",
+        "C1": "Toilet",
+        "C2": "Bathtub",
         "C3": "Closet",
-        "C4": ""
+        "C4": "HighBathroom"
     };
 
     function getSensorName(sensorId) {
         return SENSOR_NAME_MAP[sensorId];
     }
 
-    function doRawSensorRecieved(sensorId) {
-        var name = getSensorName(sensorId);
-
-    }
+    context.getSensorName = getSensorName;
 
 })(exports);
+ 

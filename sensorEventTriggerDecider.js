@@ -9,10 +9,12 @@
      hueWrapper = require('./hueWrapper'),
      Facade = require('./facade'),
      Events = require('./events');
+     sensorNames = require('./sensorWrapper');
 
 (function(context) {
 
     var SENSOR_TRIGGERS = [
+        new SensorTrigger("C1", Events.BATHROOM_MOTION_ACTIVE, "active"),
         new SensorTrigger("roomEntranceMotion", Events.ENTRANCE_MOTION_ACTIVE, "active"),
         new SensorTrigger("roomEntranceMotion", Events.ENTRANCE_MOTION_INACTIVE, "inactive")
     ];
@@ -36,12 +38,13 @@
         return (this.sensor == sensor) && (this.state == state);
     };
     SensorTrigger.prototype.fire = function() {
-        logger.i("Sensor Triggered Event: " + this.eventIdToFire);
+//        logger.i("Sensor Triggered Event: " + this.eventIdToFire);
         Facade.handleEvent(this.eventIdToFire);
     };
 
 
     function handleRawInput(query) {
+        query.sensor = sensorNames.getSensorName(query.sensor) || query.sensor;
         logger.i(util.inspect(query));
         sensorMatches(query);
     }
@@ -51,7 +54,7 @@
             return SensorTrigger.prototype.shouldFire.call(trigger, query);
         });
 
-        logger.i("sensorMatches: " + util.inspect(triggersToFire));
+//        logger.i("sensorMatches: " + util.inspect(triggersToFire));
         _.each(triggersToFire, function(trigger) {
             SensorTrigger.prototype.fire.call(trigger);
         });

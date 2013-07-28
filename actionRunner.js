@@ -23,6 +23,7 @@ var _ = require('underscore'),
     }
 
     function init() {
+        addAction(Events.BATHROOM_MOTION_ACTIVE, new ActionDirectory.SimpleLightAction("Toilet", 'on'));
         addAction(Events.ENTRANCE_MOTION_ACTIVE, new ActionDirectory.SimpleLightAction("Stairs Bottom", 'on'));
         addAction(Events.ENTRANCE_MOTION_INACTIVE, new ActionDirectory.SimpleLightAction("Stairs Bottom", 'off'));
     }

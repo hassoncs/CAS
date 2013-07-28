@@ -15,4 +15,6 @@ var util = require('util'),
     exports.ENTRANCE_MOTION_ACTIVE = next();
     exports.ENTRANCE_MOTION_INACTIVE = next();
 
+    exports.BATHROOM_MOTION_ACTIVE = next();
+
 })(exports);

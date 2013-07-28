@@ -28,7 +28,7 @@ var state = require('.././state');
     }
     SimpleLightAction.prototype = new Action();
     SimpleLightAction.prototype.run = function() {
-        state.saveTime(this.lightName, "activateTime");
+//        state.saveTime(this.lightName, "activateTime");
 
         logger.i(util.format("Running SimpleLightAction action: %s", this.lightAction));
         lights.getLightByName(this.lightName)[this.lightAction]();
