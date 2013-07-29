@@ -5,6 +5,7 @@
 var util = require('util'),
     logger = require('./logger'),
     actionRunner = require('./actionRunner');
+var rootTriggerGroup = require('./triggers/groups/rootTriggerGroup');
 
 (function(context) {
 
@@ -15,6 +16,11 @@ var util = require('util'),
 
     exports.handleEvent = function(eventId, eventBody) {
         actionRunner.runActionsForEvent(new Event(eventId, eventBody));
+    };
+
+    exports.handleQuery = function(query) {
+        logger.i(util.inspect(query));
+        rootTriggerGroup.rootTriggerGroup.fire(query);
     };
     
 })(exports);

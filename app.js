@@ -4,9 +4,9 @@ var express = require('express');
 var Lights = require('./hueWrapper');
 var util = require('util');
 var logger = require('./logger');
-var rootTriggerGroup = require('./triggers/rootTriggerGroup');
 var actionRunner = require('./actionRunner');
 var Scenes = require('./scenes');
+var Facade = require('./facade');
 var LightAction = require('./action/actionDirectory.js').LightAction;
 var app = express();
 
@@ -16,9 +16,7 @@ app.get('/', function(req, res) {
     var message = "Success!"
 	res.send(message);
 
-    logger.i(util.inspect(query));
-//    query.sensor = sensorNames.getSensorName(query.sensor) || query.sensor;
-    rootTriggerGroup.rootTriggerGroup.fire(query);
+    Facade.handleQuery(query);
 });
 
 Lights.init();

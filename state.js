@@ -5,6 +5,7 @@
 var _ = require('underscore'),
     util = require('util'),
     logger = require('./logger');
+var Facade = require('./facade');
 
 (function(context) {
     var things = {};
@@ -15,6 +16,7 @@ var _ = require('underscore'),
 
         states[stateId] = data;
         logger.i(util.format("[Save] ThingId: %s, stateId: %s = %s", thingId, stateId, data));
+        Facade.handleQuery({ thingId: thingId, stateId: stateId, data: data });
 
         thing[stateId] = states;
         things[thingId] = thing;

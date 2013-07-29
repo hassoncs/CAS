@@ -4,14 +4,14 @@
 
 var _ = require('underscore');
 var util = require('util');
-var sensorWrapper = require('./../sensorWrapper');
-var logger = require('./../logger');
-var hueWrapper = require('./../hueWrapper');
-var Facade = require('./../facade');
-var Events = require('./../events');
-var sensorNames = require('./../sensorWrapper');
-var TriggerGroup = require('./trigger').TriggerGroup;
-var SensorTrigger = require('./sensorTrigger').SensorTrigger;
+var sensorWrapper = require('./../../sensorWrapper');
+var logger = require('./../../logger');
+var hueWrapper = require('./../../hueWrapper');
+var Facade = require('./../../facade');
+var Events = require('./../../events');
+var sensorNames = require('./../../sensorWrapper');
+var TriggerGroup = require('./../types/trigger').TriggerGroup;
+var SensorTrigger = require('./../types/sensorTrigger').SensorTrigger;
 
 (function(context) {
 
