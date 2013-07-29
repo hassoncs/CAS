@@ -40,6 +40,9 @@ var StateUpdatingAction = Actions.StateUpdatingAction;
         addAction(Events.CHRIS_LEFT_HOME, new StateUpdatingAction("chrisPhone", "state", "presence"));
         addAction(Events.SAMER_ARRIVED_HOME, new StateUpdatingAction("samerPhone", "state", "presence"));
         addAction(Events.SAMER_LEFT_HOME, new StateUpdatingAction("samerPhone", "state", "presence"));
+        addAction(
+            Events.BATHROOM_ENTRANCE_MOTION_ACTIVE,
+            new LightAction(new Light("Bathtub"), new Lights.OnLightCommand()));
     }
 
     function addAction(eventId, action) {

@@ -18,8 +18,7 @@ app.get('/', function(req, res) {
 
     logger.i(util.inspect(query));
 //    query.sensor = sensorNames.getSensorName(query.sensor) || query.sensor;
-
-    rootTriggerGroup.rootTriggerGroup.fire(query)
+    rootTriggerGroup.rootTriggerGroup.fire(query);
 });
 
 Lights.init();
