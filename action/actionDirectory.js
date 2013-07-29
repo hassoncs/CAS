@@ -77,10 +77,20 @@ var state = require('.././state');
         state.saveState(this.thingId, this.savedStateName, stateFromEvent);
     };
 
+    function DeviceAction(deviceName, command) {
+        Action.call(this);
+        this.deviceName = deviceName;
+        this.command = command;
+    }
+    DeviceAction.prototype.run = function() {
+        this.command.execute(this.deviceName);
+    }
+
     context.Action = Action;
     context.LightAction = LightAction;
     context.DelayedAction = DelayedAction;
     context.SceneAction = SceneAction;
+    context.DeviceAction = DeviceAction;
     context.StateUpdatingAction = StateUpdatingAction;
 
 })(exports);
