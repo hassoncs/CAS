@@ -24,4 +24,6 @@ var util = require('util'),
     exports.SAMER_ARRIVED_HOME = next();
     exports.SAMER_LEFT_HOME = next();
 
+    exports.HOUSE_EMPTY = next();
+
 })(exports);

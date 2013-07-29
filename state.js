@@ -11,15 +11,15 @@ var Facade = require('./facade');
     var things = {};
 
     function saveState(thingId, stateId, data) {
-        var thing = things[thingId] || {};
-        var states = thing[stateId] || {};
+        things[thingId] = things[thingId] || {};
+        var thingStates = things[thingId];
 
-        states[stateId] = data;
+        thingStates[stateId] = data;
         logger.i(util.format("[Save] ThingId: %s, stateId: %s = %s", thingId, stateId, data));
-        Facade.handleQuery({ thingId: thingId, stateId: stateId, data: data });
 
-        thing[stateId] = states;
-        things[thingId] = thing;
+        process.nextTick(function() {
+            Facade.handleQuery({ action: "save", thingId: thingId, stateId: stateId, data: data })
+        });
     }
 
     function saveTime(thingId, stateId) {
@@ -36,4 +36,5 @@ var Facade = require('./facade');
     context.saveState = saveState;
     context.saveTime = saveTime;
     context.getState = getState;
+    context.things = things;
 })(exports);

@@ -9,12 +9,22 @@ var Facade = require('./../../facade');
 var Events = require('./../../events');
 var TriggerGroup = require('./../types/trigger').TriggerGroup;
 var StateChangeTrigger = require('./../types/stateChangeTrigger').StateChangeTrigger;
+var BooleanAndTriggerGroup = require('./../types/booleanAndTriggerGroup').BooleanAndTriggerGroup;
 
 (function(context) {
 
-    var stateUpdateTriggerGroup = new TriggerGroup([
-        new StateChangeTrigger("chrisPhone", "presence", "notPresent")
-    ]);
+    function StateUpdateTriggerGroup() {
+        TriggerGroup.call(this, [
+            new BooleanAndTriggerGroup([
+                new StateChangeTrigger("chrisPhone", "presence", "notPresent", Events.HOUSE_EMPTY),
+                new StateChangeTrigger("samerPhone", "presence", "notPresent", Events.HOUSE_EMPTY)
+            ])
+        ]);
+    }
+    StateUpdateTriggerGroup.prototype = new TriggerGroup();
+    StateUpdateTriggerGroup.prototype.shouldFire = function(query) {
+        return (query.action == "save");
+    };
 
-    context.stateUpdateTriggerGroup = stateUpdateTriggerGroup;
+    context.StateUpdateTriggerGroup = StateUpdateTriggerGroup;
 })(exports);

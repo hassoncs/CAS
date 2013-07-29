@@ -20,7 +20,7 @@ var Trigger = require('./trigger').Trigger;
     StateChangeTrigger.prototype = new Trigger();
     StateChangeTrigger.prototype.shouldFire = function(query) {
         var curState = state.getState(this.thingId, this.stateId);
-        return (this.state == curState) && (this.stateId == stateId) && (this.state == state);
+        return (this.state == curState);
     };
 
     context.StateChangeTrigger = StateChangeTrigger;

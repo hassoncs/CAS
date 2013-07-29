@@ -28,6 +28,7 @@ var StateUpdatingAction = Actions.StateUpdatingAction;
     }
 
     function init() {
+        addAction(Events.HOUSE_EMPTY, new LightAction(new Light("Hallway"), new Lights.OffLightCommand()));
         addAction(Events.BATHROOM_MOTION_ACTIVE, new LightAction(new Light("Toilet"), new Lights.OnLightCommand()));
         addAction(Events.ENTRANCE_MOTION_ACTIVE, new SceneAction(Scenes.WelcomeHome));
         addAction(Events.ENTRANCE_MOTION_INACTIVE, new LightAction(Lights.EntranceGroup, new Lights.OffLightCommand()));

@@ -8,6 +8,7 @@ var _ = require('underscore'),
 
 (function(context) {
     var HUE_USER_NAME = "lalaautomationserver";
+    var FALLBACK_HUE_BRIDGE_IP = "10.0.0.30";
 
     var hueBridgeInfo,
         hueBridgeDetailedInfo,
@@ -136,10 +137,15 @@ var _ = require('underscore'),
     function hueBridgeInfoReceived(hueBridges) {
         logger.i('Bridge Info Received!');
         logger.i(util.format('%d Hue Bridges Found: %s', hueBridges.length, util.inspect(hueBridges)));
-        hueBridgeInfo = hueBridges[0];
+
+        var ipaddress = FALLBACK_HUE_BRIDGE_IP;
+        if (hueBridges.length > 0) {
+            hueBridgeInfo = hueBridges[0];
+            ipaddress = hueBridgeInfo.ipaddress;
+        }
 
         logger.i('Connecting to the HueApi...');
-        hueApi = new HueApi(hueBridgeInfo.ipaddress, HUE_USER_NAME);
+        hueApi = new HueApi(ipaddress, HUE_USER_NAME);
         hueApi
             .connect()
             .then(hueApiConnectionSucess)

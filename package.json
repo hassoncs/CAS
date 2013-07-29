@@ -9,6 +9,7 @@
         "underscore": "1.5.x",
         "logging": "2.x",
         "time": "0.9.x",
-        "cron": "1.0.x"
+        "cron": "1.0.x",
+        "node-inspector": "x"
     }
 }
