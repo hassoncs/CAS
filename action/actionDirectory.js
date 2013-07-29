@@ -61,5 +61,6 @@ var state = require('.././state');
     context.Action = Action;
     context.LightAction = LightAction;
     context.DelayedAction = DelayedAction;
+    context.SceneAction = SceneAction;
 
 })(exports);

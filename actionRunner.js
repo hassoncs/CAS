@@ -11,6 +11,7 @@ var Events = require('./events');
 var Scenes = require('./scenes');
 var Light = Lights.Light;
 var LightAction = Actions.LightAction;
+var SceneAction = Actions.SceneAction;
 
 (function(context) {
 
