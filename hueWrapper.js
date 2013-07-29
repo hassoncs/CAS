@@ -3,7 +3,7 @@ var _ = require('underscore'),
     util = require('util'),
     hue = require("node-hue-api"),
     HueApi = hue.HueApi,
-    lightState = hue.lightState,
+    LightState = hue.lightState,
     logger = require('./logger');
 
 (function(context) {
@@ -40,6 +40,7 @@ var _ = require('underscore'),
 
         logger.i("running commands on light group: " + this.name);
         _.each(this.lightNames, function(lightName) {
+            logger.i("light: " + lightName);
             var lightId = lightNamesToIds[lightName];
             _.each(commands, function(command) {
                 command.execute(lightId);
@@ -49,7 +50,7 @@ var _ = require('underscore'),
 
     function LightCommand() {}
     LightCommand.prototype.execute = function(lightId) {
-        logger.i(util.format('Executing light command on light: %s', lightArray[lightId].name));
+        /** override */
     }
 
     function OnLightCommand(transition) {
@@ -60,7 +61,7 @@ var _ = require('underscore'),
     OnLightCommand.prototype.execute = function(lightId) {
         LightCommand.prototype.execute(lightId);
         hueApi
-            .setLightState(lightId, lightState.create()
+            .setLightState(lightId, LightState.create()
                 .on()
                 .transition(this.transition))
             .done();
@@ -75,7 +76,7 @@ var _ = require('underscore'),
     OffLightCommand.prototype.execute = function(lightId) {
         LightCommand.prototype.execute(lightId);
         hueApi
-            .setLightState(lightId, lightState.create()
+            .setLightState(lightId, LightState.create()
                 .off()
                 .transition(this.transition))
             .done();
@@ -90,7 +91,7 @@ var _ = require('underscore'),
     ColorLightCommand.prototype.execute = function(lightId) {
         LightCommand.prototype.execute(lightId);
         hueApi
-            .setLightState(this.lightId, lightState.create()
+            .setLightState(this.lightId, LightState.create()
                 .on()
                 .rgb(this.color.r, this.color.g, this.color.b)
                 .transition(this.transition))
@@ -107,7 +108,7 @@ var _ = require('underscore'),
     BrightnessLightCommand.prototype.execute = function(lightId) {
         LightCommand.prototype.execute(lightId);
         hueApi
-            .setLightState(lightId, lightState.create()
+            .setLightState(lightId, LightState.create()
                 .on()
                 .brightness(this.brightness)
                 .transition(this.transition))
@@ -124,7 +125,7 @@ var _ = require('underscore'),
     ColorBrightnessLightCommand.prototype.execute = function(lightId) {
         LightCommand.prototype.execute(lightId);
         hueApi
-            .setLightState(lightId, lightState.create()
+            .setLightState(lightId, LightState.create()
                 .on()
                 .rgb(this.color.r, this.color.g, this.color.b)
                 .brightness(this.brightness)
@@ -176,7 +177,7 @@ var _ = require('underscore'),
         for (var i = 1; i <= lightArray.length; i++) {
             logger.i('turning on ' + lightArray[i-1].name);
             hueApi
-                .setLightState(i, lightState.create().on())
+                .setLightState(i, LightState.create().on())
                 .done();
         }
     }
@@ -203,15 +204,15 @@ var _ = require('underscore'),
     exports.BrightnessLightCommand = BrightnessLightCommand;
     exports.ColorBrightnessLightCommand = ColorBrightnessLightCommand;
     exports.AllLights = new LightGroup("allLights",
-        "Stairs Bottom",
+        ["Stairs Bottom",
         "Stairs Top",
         "Hallway",
         "Bedroom Main",
         "Bedroom Window",
         "Bedroom Spotlight",
         "Bathtub",
-        "Toilet");
-    exports.EntranceGroup = new LightGroup("entranceLights", "Stairs Bottom", "Stairs Top");
+        "Toilet"]);
+    exports.EntranceGroup = new LightGroup("entranceLights", ["Stairs Bottom", "Stairs Top"]);
 })(exports);
 
 
