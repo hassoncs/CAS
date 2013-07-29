@@ -26,9 +26,10 @@ var LightAction = Actions.LightAction;
     }
 
     function init() {
+        addAction(Events.BATHROOM_MOTION_ACTIVE, new LightAction(new Light("Toilet"), new Lights.OnLightCommand()));
+
         addAction(Events.ENTRANCE_MOTION_ACTIVE, new LightAction(new Light("Stairs Bottom"), new Lights.OnLightCommand()));
-        addAction(Events.ENTRANCE_MOTION_ACTIVE, new DelayedAction(
-            LightAction(new Light("Stairs Bottom"), new Lights.OffLightCommand()), 60000));
+        addAction(Events.ENTRANCE_MOTION_INACTIVE, new LightAction(new Light("Stairs Bottom"), new Lights.OffLightCommand()));
     }
 
     function addAction(eventId, action) {
