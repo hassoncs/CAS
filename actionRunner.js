@@ -8,9 +8,9 @@ var logger = require('./logger');
 var Lights = require('./hueWrapper');
 var Actions = require('./action/actionDirectory');
 var Events = require('./events');
+var Scenes = require('./scenes');
 var Light = Lights.Light;
 var LightAction = Actions.LightAction;
- var DelayedAction = Actions.DelayedAction;
 
 (function(context) {
 
@@ -27,9 +27,11 @@ var LightAction = Actions.LightAction;
 
     function init() {
         addAction(Events.BATHROOM_MOTION_ACTIVE, new LightAction(new Light("Toilet"), new Lights.OnLightCommand()));
-
-        addAction(Events.ENTRANCE_MOTION_ACTIVE, new LightAction(new Light("Stairs Bottom"), new Lights.OnLightCommand()));
-        addAction(Events.ENTRANCE_MOTION_INACTIVE, new LightAction(new Light("Stairs Bottom"), new Lights.OffLightCommand()));
+        addAction(Events.ENTRANCE_MOTION_ACTIVE, new SceneAction(Scenes.WelcomeHome));
+        addAction(Events.ENTRANCE_MOTION_INACTIVE, new LightAction(Lights.EntranceGroup, new Lights.OffLightCommand()));
+        addAction(
+            Events.ENTRANCE_MOTION_INACTIVE,
+            new LightAction(new Light("Hallway"), new Lights.BrightnessLightCommand(40, 2)));
     }
 
     function addAction(eventId, action) {

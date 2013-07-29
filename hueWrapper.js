@@ -202,6 +202,16 @@ var _ = require('underscore'),
     exports.ColorLightCommand = ColorLightCommand;
     exports.BrightnessLightCommand = BrightnessLightCommand;
     exports.ColorBrightnessLightCommand = ColorBrightnessLightCommand;
+    exports.AllLights = new LightGroup("allLights",
+        "Stairs Bottom",
+        "Stairs Top",
+        "Hallway",
+        "Bedroom Main",
+        "Bedroom Window",
+        "Bedroom Spotlight",
+        "Bathtub",
+        "Toilet");
+    exports.EntranceGroup = new LightGroup("entranceLights", "Stairs Bottom", "Stairs Top");
 })(exports);
 
 
