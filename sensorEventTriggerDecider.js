@@ -2,14 +2,16 @@
     sensorTriggerDecider
 */
 
- var _ = require('underscore'),
-     util = require('util'),
-     sensorWrapper = require('./sensorWrapper'),
-     logger = require('./logger'),
-     hueWrapper = require('./hueWrapper'),
-     Facade = require('./facade'),
-     Events = require('./events');
-     sensorNames = require('./sensorWrapper');
+var _ = require('underscore');
+var util = require('util');
+var sensorWrapper = require('./sensorWrapper');
+var logger = require('./logger');
+var hueWrapper = require('./hueWrapper');
+var Facade = require('./facade');
+var Events = require('./events');
+var sensorNames = require('./sensorWrapper');
+var Trigger = require('./triggers/trigger').Trigger;
+var SensorTrigger = require('./triggers/sensorTrigger').SensorTrigger;
 
 (function(context) {
 
@@ -21,30 +23,6 @@
         new SensorTrigger("chrisPhoneWifi", Events.CHRIS_ARRIVED_HOME, "present"),
         new SensorTrigger("chrisPhoneWifi", Events.CHRIS_LEFT_HOME, "notPresent")
     ];
-
-    function Trigger() {}
-    Trigger.prototype.fire = function(query) { /* noop */ };
-    Trigger.prototype.shouldFire = function(query) { return false; };
-
-
-
-    function SensorTrigger(sensor, eventIdToFire, state) {
-        Trigger.call(this);
-        this.sensor = sensor;
-        this.eventIdToFire = eventIdToFire;
-        this.state = state;
-    }
-    SensorTrigger.prototype = new Trigger();
-    SensorTrigger.prototype.shouldFire = function(query) {
-        var sensor = query.sensor;
-        var state = query.state;
-        return (this.sensor == sensor) && (this.state == state);
-    };
-    SensorTrigger.prototype.fire = function(query) {
-        logger.i("Sensor Triggered Event: " + this.eventIdToFire);
-        Facade.handleEvent(this.eventIdToFire, { state: this.state });
-    };
-
 
     function handleRawInput(query) {
         query.sensor = sensorNames.getSensorName(query.sensor) || query.sensor;
