@@ -4,24 +4,25 @@ var express = require('express');
 var Lights = require('./hueWrapper');
 var util = require('util');
 var logger = require('./logger');
-var sensorTriggerDecider = require('./sensorEventTriggerDecider');
+var rootTriggerGroup = require('./triggers/rootTriggerGroup');
 var actionRunner = require('./actionRunner');
 var Scenes = require('./scenes');
 var LightAction = require('./action/actionDirectory.js').LightAction;
 var app = express();
 
 app.get('/', function(req, res) {
+    var query = req.query;
+
     var message = "Success!"
 	res.send(message);
 
-//    sensorTriggerDecider.handleRawInput({sensor:"C2"});
-    sensorTriggerDecider.handleRawInput(req.query);
+    logger.i(util.inspect(query));
+//    query.sensor = sensorNames.getSensorName(query.sensor) || query.sensor;
 
-//    Scenes.WelcomeHome.activate();
+    rootTriggerGroup.rootTriggerGroup.fire(query)
 });
 
 Lights.init();
-sensorTriggerDecider.init();
 actionRunner.init();
 app.listen(serverPort);
 

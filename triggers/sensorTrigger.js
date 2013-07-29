@@ -7,6 +7,7 @@ var util = require('util');
 var logger = require('.././logger');
 var Facade = require('.././facade');
 var Trigger = require('./trigger').Trigger;
+var TriggerGroup = require('./trigger').TriggerGroup;
 
 (function(context) {
 
@@ -23,7 +24,11 @@ var Trigger = require('./trigger').Trigger;
         return (this.sensor == sensor) && (this.state == state);
     };
     SensorTrigger.prototype.fire = function(query) {
-        logger.i("Sensor Triggered Event: " + this.eventIdToFire);
+        if (!this.shouldFire(query)) {
+            return;
+        }
+
+//        logger.i("Sensor Triggered Event: " + this.eventIdToFire);
         Facade.handleEvent(this.eventIdToFire, { state: this.state });
     };
 
