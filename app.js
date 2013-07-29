@@ -16,6 +16,8 @@ app.get('/', function(req, res) {
 
 //    sensorTriggerDecider.handleRawInput({sensor:"C2"});
     sensorTriggerDecider.handleRawInput(req.query);
+
+//    Scenes.WelcomeHome.activate();
 });
 
 Lights.init();

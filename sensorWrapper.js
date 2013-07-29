@@ -18,4 +18,3 @@
     context.getSensorName = getSensorName;
 
 })(exports);
- 

@@ -16,12 +16,15 @@
     var SENSOR_TRIGGERS = [
         new SensorTrigger("C1", Events.BATHROOM_MOTION_ACTIVE, "active"),
         new SensorTrigger("roomEntranceMotion", Events.ENTRANCE_MOTION_ACTIVE, "active"),
-        new SensorTrigger("roomEntranceMotion", Events.ENTRANCE_MOTION_INACTIVE, "inactive")
+        new SensorTrigger("roomEntranceMotion", Events.ENTRANCE_MOTION_INACTIVE, "inactive"),
+
+        new SensorTrigger("chrisPhoneWifi", Events.CHRIS_ARRIVED_HOME, "present"),
+        new SensorTrigger("chrisPhoneWifi", Events.CHRIS_LEFT_HOME, "notPresent")
     ];
 
     function Trigger() {}
-    Trigger.prototype.fire = function() { /* noop */ };
-    Trigger.prototype.shouldFire = function() { return false; };
+    Trigger.prototype.fire = function(query) { /* noop */ };
+    Trigger.prototype.shouldFire = function(query) { return false; };
 
 
 
@@ -37,9 +40,9 @@
         var state = query.state;
         return (this.sensor == sensor) && (this.state == state);
     };
-    SensorTrigger.prototype.fire = function() {
-//        logger.i("Sensor Triggered Event: " + this.eventIdToFire);
-        Facade.handleEvent(this.eventIdToFire);
+    SensorTrigger.prototype.fire = function(query) {
+        logger.i("Sensor Triggered Event: " + this.eventIdToFire);
+        Facade.handleEvent(this.eventIdToFire, { state: this.state });
     };
 
 
@@ -54,9 +57,9 @@
             return SensorTrigger.prototype.shouldFire.call(trigger, query);
         });
 
-//        logger.i("sensorMatches: " + util.inspect(triggersToFire));
+        logger.i("sensorMatches: " + util.inspect(triggersToFire));
         _.each(triggersToFire, function(trigger) {
-            SensorTrigger.prototype.fire.call(trigger);
+            SensorTrigger.prototype.fire.call(trigger, query);
         });
     }
 

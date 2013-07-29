@@ -1,19 +1,22 @@
-/*
-   actionDirectory.js
+
+ /*
+    actionDirectory.js
 */
 
 var _ = require('underscore');
 var util = require('util');
 var logger = require('.././logger');
 var lights = require('.././hueWrapper');
+var actionRunner = require('.././hueWrapper');
 var state = require('.././state');
+
 
 (function(context) {
 
     function Action() {
         this.actionType = "Action";
     }
-    Action.prototype.run = function() {
+    Action.prototype.run = function(triggeredByEvent) {
         logger.i(util.format("Running action %s!", this.actionType));
     };
 
@@ -27,7 +30,7 @@ var state = require('.././state');
         }
     }
     LightAction.prototype = new Action();
-    LightAction.prototype.run = function() {
+    LightAction.prototype.run = function(triggeredByEvent) {
         state.saveTime(this.name, "activateTime");
         logger.i("running action on light: " + this.light.name);
         this.light.act(this.lightCommands);
@@ -49,18 +52,35 @@ var state = require('.././state');
         }, this.delay);
     };
 
+
     function SceneAction(scene) {
         Action.call(this);
         this.scene = scene;
     }
     SceneAction.prototype = new Action();
-    SceneAction.prototype.run = function() {
+    SceneAction.prototype.run = function(triggeredByEvent) {
         this.scene.activate();
     }
+
+    function StateUpdatingAction(thingId, stateIdToGrabFromEvent, savedStateName) {
+        Action.call(this);
+        this.thingId = thingId;
+        this.stateId = stateIdToGrabFromEvent;
+        this.savedStateName = savedStateName || stateIdToGrabFromEvent;
+        logger.i('StateUpdatingAction constructor: ', thingId, state);
+    }
+    StateUpdatingAction.prototype = new Action();
+    StateUpdatingAction.prototype.run = function(sourceEvent) {
+        logger.i(util.format("Running StateUpdatingAction caused by %s", util.inspect(sourceEvent)));
+        var eventBody = sourceEvent.eventBody;
+        var stateFromEvent = eventBody != null ? eventBody[this.stateId] : null;
+        state.saveState(this.thingId, this.savedStateName, stateFromEvent);
+    };
 
     context.Action = Action;
     context.LightAction = LightAction;
     context.DelayedAction = DelayedAction;
     context.SceneAction = SceneAction;
+    context.StateUpdatingAction = StateUpdatingAction;
 
 })(exports);
