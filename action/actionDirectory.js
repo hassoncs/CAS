@@ -49,6 +49,15 @@ var state = require('.././state');
         }, this.delay);
     };
 
+    function SceneAction(scene) {
+        Action.call(this);
+        this.scene = scene;
+    }
+    SceneAction.prototype = new Action();
+    SceneAction.prototype.run = function() {
+        this.scene.activate();
+    }
+
     context.Action = Action;
     context.LightAction = LightAction;
     context.DelayedAction = DelayedAction;
