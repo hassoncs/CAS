@@ -1,5 +1,5 @@
- /*
-    actionRunner
+/*
+actionRunner
 */
 
 var _ = require('underscore');
@@ -9,9 +9,11 @@ var Lights = require('./hueWrapper');
 var Actions = require('./action/actionDirectory');
 var Events = require('./events');
 var Scenes = require('./scenes');
+var Devices = require('./irDevices');
 var Light = Lights.Light;
 var LightAction = Actions.LightAction;
 var SceneAction = Actions.SceneAction;
+var DeviceAction = Actions.DeviceAction;
 var StateUpdatingAction = Actions.StateUpdatingAction;
 
 (function(context) {
@@ -36,6 +38,15 @@ var StateUpdatingAction = Actions.StateUpdatingAction;
         addAction(Events.HOUSE_EMPTY, new SceneAction(Scenes.AllOff));
         addAction(Events.BATHROOM_MOTION_ACTIVE, new LightAction(new Light("Toilet"), new Lights.OnLightCommand()));
         addAction(Events.ENTRANCE_MOTION_ACTIVE, new SceneAction(Scenes.WelcomeHome));
+        addAction(
+            Events.ENTRANCE_MOTION_ACTIVE,
+            new DeviceAction("TV", new Devices.DeviceTogglePowerCommand()));
+        addAction(
+            Events.ENTRANCE_MOTION_ACTIVE,
+            new DeviceAction("Stereo", new Devices.DeviceTogglePowerCommand()));
+        addAction(
+            Events.ENTRANCE_MOTION_ACTIVE,
+            new DeviceAction("ATV", new Devices.DeviceSelectCommand()));
         addAction(Events.ENTRANCE_MOTION_INACTIVE, new LightAction(Lights.EntranceGroup, new Lights.OffLightCommand()));
         addAction(
             Events.ENTRANCE_MOTION_INACTIVE,
