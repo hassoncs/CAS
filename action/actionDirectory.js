@@ -31,7 +31,7 @@ var state = require('.././state');
     }
     LightAction.prototype = new Action();
     LightAction.prototype.run = function(triggeredByEvent) {
-        state.saveTime(this.name, "activateTime");
+//        state.saveTime(this.name, "activateTime");
         logger.i("running action on light: " + this.light.name);
         this.light.act(this.lightCommands);
     };
