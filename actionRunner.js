@@ -23,6 +23,7 @@ var StateUpdatingAction = Actions.StateUpdatingAction;
             return;
         }
 
+        logger.i(util.format("Event %s", event.eventId));
         var successful = _.countBy(actions, function(action) {
             action.run(event);
             return "Success";

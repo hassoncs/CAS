@@ -15,7 +15,6 @@ var Facade = require('./facade');
         var thingStates = things[thingId];
 
         thingStates[stateId] = data;
-        logger.i(util.format("[Save] ThingId: %s, stateId: %s = %s", thingId, stateId, data));
 
 //        process.nextTick(function() {
         Facade.handleQuery({ action: "save", thingId: thingId, stateId: stateId, data: data });

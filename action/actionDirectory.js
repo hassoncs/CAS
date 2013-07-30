@@ -75,6 +75,7 @@ var state = require('.././state');
         var eventBody = sourceEvent.eventBody;
         var stateFromEvent = eventBody != null ? eventBody[this.stateId] : null;
         state.saveState(this.thingId, this.savedStateName, stateFromEvent);
+        state.saveTime(this.thingId, this.savedStateName + "UpdateTime");
     };
 
     function DeviceAction(deviceName, command) {

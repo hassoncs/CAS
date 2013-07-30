@@ -11,7 +11,7 @@ var TriggerGroup = require('./trigger').TriggerGroup;
 
 (function(context) {
 
-    function SensorTrigger(sensor, eventIdToFire, state) {
+    function SensorTrigger(sensor, state, eventIdToFire) {
         Trigger.call(this, ("SensorTrigger:" + sensor + eventIdToFire + state), eventIdToFire);
         this.sensor = sensor;
         this.state = state;
