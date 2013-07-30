@@ -18,7 +18,7 @@ var SensorTrigger = require('./../types/sensorTrigger').SensorTrigger;
     var sensorTriggerGroup = new TriggerGroup();
 
     function SensorTriggerGroup() {
-        TriggerGroup.call(this, [
+        TriggerGroup.call(this, "SensorTriggerGroup", [
             new SensorTrigger("C1", Events.BATHROOM_MOTION_ACTIVE, "active"),
             new SensorTrigger("roomEntranceMotion", Events.ENTRANCE_MOTION_ACTIVE, "active"),
             new SensorTrigger("roomEntranceMotion", Events.ENTRANCE_MOTION_INACTIVE, "inactive"),

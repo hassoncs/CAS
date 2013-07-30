@@ -9,7 +9,8 @@ var Facade = require('./../../facade');
 
 (function(context) {
 
-    function Trigger(eventIdToFire) {
+    function Trigger(name, eventIdToFire) {
+        this.name = name;
         this.eventIdToFire = eventIdToFire;
     }
     Trigger.prototype.fire = function(query) {
@@ -18,11 +19,12 @@ var Facade = require('./../../facade');
     Trigger.prototype.shouldFire = function(query) { return true; };
 
 
-    function TriggerGroup(triggers) {
+    function TriggerGroup(name, triggers, eventIdToFire) {
+        Trigger.call(this, name, eventIdToFire);
         this.triggers = triggers;
     }
+    TriggerGroup.prototype = new Trigger();
     TriggerGroup.prototype.fire = function(query) {
-
         _.each(this.triggers, function(trigger) {
             if (trigger.shouldFire(query)) {
                 trigger.fire(query);

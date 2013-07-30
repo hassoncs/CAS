@@ -2,6 +2,7 @@
     events.js
 */
 
+var _ = require('underscore');
 var util = require('util'),
     logger = require('./logger');
 
@@ -25,5 +26,12 @@ var util = require('util'),
     exports.SAMER_LEFT_HOME = next();
 
     exports.HOUSE_EMPTY = next();
+    exports.SOMEBODY_HOME = next();
+
+    // Make the keys human-readable
+    var keys = _.keys(exports);
+    _.each(keys, function(eventName) {
+        exports[eventName] = eventName;
+    });
 
 })(exports);

@@ -51,4 +51,8 @@ var Light = hue.Light;
         new LightAction(allLightGroup, new OffLightCommand())
     ]);
 
+    context.SomebodyHome = new Scene([
+        new LightAction(bedroomLightGroup, new ColorBrightnessLightCommand(Color.randomColor(), 100, 10))
+    ]);
+
 })(exports);

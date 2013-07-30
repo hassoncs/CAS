@@ -22,12 +22,16 @@ var StateUpdatingAction = Actions.StateUpdatingAction;
         if (!actions) {
             return;
         }
-        _.each(actions, function(action) {
+
+        var successful = _.countBy(actions, function(action) {
             action.run(event);
-        });
+            return "Success";
+        })["Success"];
+        logger.i(util.format("%d actions run due to event %s", successful, event.eventId));
     }
 
     function init() {
+//        addAction(Events.SOMEBODY_HOME, new SceneAction(Scenes.SomebodyHome));
         addAction(Events.HOUSE_EMPTY, new SceneAction(Scenes.AllOff));
         addAction(Events.BATHROOM_MOTION_ACTIVE, new LightAction(new Light("Toilet"), new Lights.OnLightCommand()));
         addAction(Events.ENTRANCE_MOTION_ACTIVE, new SceneAction(Scenes.WelcomeHome));

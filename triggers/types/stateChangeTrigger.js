@@ -12,7 +12,7 @@ var Trigger = require('./trigger').Trigger;
 (function(context) {
 
     function StateChangeTrigger(thingId, stateId, state, eventIdToFire) {
-        Trigger.call(this, eventIdToFire);
+        Trigger.call(this, "StateChangeTrigger:" + (thingId + stateId + state), eventIdToFire);
         this.thingId = thingId;
         this.stateId = stateId;
         this.state = state;

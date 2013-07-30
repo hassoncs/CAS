@@ -12,7 +12,7 @@ var StateUpdateTriggerGroup = require('./stateUpdateTriggerGroup').StateUpdateTr
 (function(context) {
 
     function RootTriggerGroup() {
-        TriggerGroup.call(this, [
+        TriggerGroup.call(this, "_root", [
             new SensorTriggerGroup(),
             new StateUpdateTriggerGroup()
         ]);
