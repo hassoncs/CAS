@@ -28,7 +28,10 @@ var TimeSinceStateChangeGreaterThanTrigger = require('./../types/stateChangeTrig
             // If entrance motion and the lastUpdateTime for presence greater than 30 seconds ago
             new BooleanANDTriggerGroup("WelcomeHomeTrigger", [
                 new SensorTrigger("roomEntranceMotion", "active"),
-                new TimeSinceStateChangeGreaterThanTrigger("samerPhone", "presenceUpdateTime", 60 * 5 /* 5 mins */, true)
+                new BooleanORTriggerGroup("WelcomeHomeTrigger Either Chris or Samer", [
+                    new TimeSinceStateChangeGreaterThanTrigger("chrisPhone", "presenceUpdateTime", 60 * 5 /* 5 mins */, true),
+                    new TimeSinceStateChangeGreaterThanTrigger("samerPhone", "presenceUpdateTime", 60 * 5 /* 5 mins */, true)
+                ])
             ], Events.ENTRANCE_MOTION_ACTIVE),
 
 
