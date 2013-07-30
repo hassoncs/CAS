@@ -42,9 +42,9 @@ var Light = hue.Light;
 
     context.WelcomeHome = new Scene([
         new LightAction(new Light("Stairs Bottom"), new ColorBrightnessLightCommand(Color.randomColor(), 100, 1)),
-        new LightAction(new Light("Stairs Top"), new ColorBrightnessLightCommand(Color.randomColor(), 100, 3)),
-        new LightAction(new Light("Hallway"), new ColorBrightnessLightCommand(Color.randomColor(), 100, 5)),
-        new LightAction(bedroomLightGroup, new ColorBrightnessLightCommand(Color.randomColor(), 100, 5))
+        new LightAction(new Light("Stairs Top"), new ColorBrightnessLightCommand(Color.randomColor(), 100, 4)),
+        new LightAction(new Light("Hallway"), new ColorBrightnessLightCommand(Color.randomColor(), 100, 7)),
+        new LightAction(bedroomLightGroup, new ColorBrightnessLightCommand(Color.randomColor(), 100, 7))
     ]);
 
     context.AllOff = new Scene([
