@@ -5,6 +5,7 @@
 var util = require('util'),
     logger = require('./logger'),
     actionRunner = require('./actionRunner');
+var pubsub = require('./pubsub.js');
 var RootTriggerGroup = require('./triggers/groups/rootTriggerGroup').RootTriggerGroup;
 
 (function(context) {
@@ -15,14 +16,15 @@ var RootTriggerGroup = require('./triggers/groups/rootTriggerGroup').RootTrigger
     }
 
     exports.handleEvent = function(eventId, eventBody) {
-        actionRunner.runActionsForEvent(new Event(eventId, eventBody));
+        var event = new Event(eventId, eventBody);
+        actionRunner.runActionsForEvent(event);
+        pubsub.publish('/event', util.inspect(event));
     };
 
     var root = new RootTriggerGroup();
     exports.handleQuery = function(query) {
-        logger.i(util.inspect(query));
-//        logger.i(util.inspect(root));
-
+        logger.i(query);
+        pubsub.publish('/event', util.inspect(query));
         root.fire(query);
     };
     

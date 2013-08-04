@@ -1,0 +1,89 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <title>New Page</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
+<script src="http://code.jquery.com/jquery-git2.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<link href="http://twitter.github.io/bootstrap/assets/css/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="http://twitter.github.io/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+<script src="http://twitter.github.io/bootstrap/assets/js/bootstrap.js"></script>
+<script type="text/javascript" src="http://localhost:11338/faye/client.js"></script>
+<script type="text/javascript" src="js/ejs.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="navbar">
+        <a href="#" class="navbar-brand">CAS</a><a></a>
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <a href="#">Status</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container">
+    <div class="row"></div>
+    <div class="panel">
+      <div class="panel-heading">
+        <h1>Status</h1>
+      </div>
+      <p>
+        <table class="table table-condensed">
+            <th><tr>
+                <td></td>
+            </tr></th>
+            <tbody data-event-table>
+
+            </tbody>
+         </table>
+      </p>
+      <div class="panel-footer">
+      </div>
+    </div>
+    </div>
+
+    <script type="text/javascript">
+
+        ejs.open = '{{';
+        ejs.close = '}}';
+        function renderTemplateByName(templateId, data) {
+            var template = $("[data-template-name=" + templateId + "]").text();
+            return ejs.render(template, data);
+        }
+
+
+        var client = new Faye.Client('http://localhost:11338/faye');
+        var subscription = client.subscribe('/*', function(message) {
+          // handle message
+          var msgAsString = JSON.stringify(message, undefined, 2);
+          console.log(msgAsString);
+
+            message = $.extend({
+                action: null,
+                thingId: null,
+                stateId: null,
+                data: null
+            }, message);
+          $('[data-event-table]').append(renderTemplateByName("event-row", message));
+        });
+    </script>
+  </body>
+
+
+    <script type="ejs/template" data-template-name="event-row">
+        <tr>
+            <td>{{= action }}</td>
+            <td>{{= thingId }}</td>
+            <td>{{= stateId }}</td>
+            <td>{{= data }}</td>
+        </tr>
+    </script>
+
+
+</html>
