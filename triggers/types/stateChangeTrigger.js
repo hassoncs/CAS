@@ -34,6 +34,7 @@ var Trigger = require('./trigger').Trigger;
         return (this.state == curState);
     };
 
+
     function TimeSinceStateChangeGreaterThanTrigger(thingId, stateId, eventIdToFire, timeSinceChange, invert) {
         StateChangeTrigger.call(this, thingId, stateId, eventIdToFire);
         this.name = "TimeSinceStateChangeTrigger:" + (thingId + stateId + timeSinceChange);

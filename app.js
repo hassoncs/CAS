@@ -11,6 +11,9 @@ var http = require('http');
 var faye = require('faye');
 var ejs = require('ejs');
 var view = require('./view.js');
+var state = require('./state.js');
+var config = require('./config.js');
+var recorder = require('./recorder.js');
 var pubsub = require('./pubsub.js');
 var app = express();
 
@@ -19,14 +22,15 @@ var SERVER_PORT = 11337;
 app.get('/', function(req, res) {
     var query = req.query;
 
-    Facade.handleQuery(query);
+    recorder.handleInput(query);
 	res.send(view.render(query));
 });
 
 
 pubsub.init();
 Lights.init();
-actionRunner.init();
+//actionRunner.init();
+config.init();
 view.init({viewDir: __dirname + '/views'});
 
 app.use(express.static(__dirname + '/public'));

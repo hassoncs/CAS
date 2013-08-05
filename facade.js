@@ -21,11 +21,10 @@ var RootTriggerGroup = require('./triggers/groups/rootTriggerGroup').RootTrigger
         pubsub.publish('/event', util.inspect(event));
     };
 
-    var root = new RootTriggerGroup();
-    exports.handleQuery = function(query) {
-        logger.i(query);
-        pubsub.publish('/event', util.inspect(query));
-        root.fire(query);
+    //var root = new RootTriggerGroup();
+    exports.handleExternalInput = function(input) {
+        logger.i("External input recieved: " + util.inspect(input));
+
     };
     
 })(exports);

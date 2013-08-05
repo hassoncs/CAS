@@ -5,7 +5,6 @@
 var _ = require('underscore'),
     util = require('util'),
     logger = require('./logger');
-var Facade = require('./facade');
 
 (function(context) {
     var things = {};
@@ -15,10 +14,6 @@ var Facade = require('./facade');
         var thingStates = things[thingId];
 
         thingStates[stateId] = data;
-
-//        process.nextTick(function() {
-        Facade.handleQuery({ action: "save", thingId: thingId, stateId: stateId, data: data });
-//        });
     }
 
     function saveTime(thingId, stateId) {

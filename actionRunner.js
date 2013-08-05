@@ -16,61 +16,43 @@ var SceneAction = Actions.SceneAction;
 var DeviceAction = Actions.DeviceAction;
 var StateUpdatingAction = Actions.StateUpdatingAction;
 
-(function(context) {
+/*
+ addAction(Events.SOMEBODY_HOME, new SceneAction(Scenes.SomebodyHome));
+ addAction(Events.HOUSE_EMPTY, new SceneAction(Scenes.AllOff));
+ addAction(Events.BATHROOM_MOTION_ACTIVE, new LightAction(new Light("Toilet"), new Lights.OnLightCommand()));
+ addAction(Events.ENTRANCE_MOTION_ACTIVE, new SceneAction(Scenes.WelcomeHome));
 
-    var ACTIONS = {};
-    function runActionsForEvent(event) {
-        var actions = ACTIONS[event.eventId];
-        if (!actions) {
-            return;
-        }
 
-        logger.i(util.format("Event %s", event.eventId));
-        var successful = _.countBy(actions, function(action) {
-            action.run(event);
-            return "Success";
-        })["Success"];
-        logger.i(util.format("%d actions run due to event %s", successful, event.eventId));
+ addAction(
+ Events.ENTRANCE_MOTION_ACTIVE,
+ new DeviceAction("TV", new Devices.DeviceTogglePowerCommand()));
+ addAction(
+ Events.ENTRANCE_MOTION_ACTIVE,
+ new DeviceAction("Stereo", new Devices.DeviceTogglePowerCommand()));
+ addAction(
+ Events.ENTRANCE_MOTION_ACTIVE,
+ new DeviceAction("ATV", new Devices.DeviceSelectCommand()));
+ addAction(Events.ENTRANCE_MOTION_INACTIVE, new LightAction(Lights.EntranceGroup, new Lights.OffLightCommand()));
+ addAction(
+ Events.ENTRANCE_MOTION_INACTIVE,
+ new LightAction(new Light("Hallway"), new Lights.BrightnessLightCommand(40, 2)));
+
+ addAction(
+ Events.BATHROOM_ENTRANCE_MOTION_ACTIVE,
+ new LightAction(new Light("Bathtub"), new Lights.OnLightCommand()));
+ */
+
+var actionTypes;
+var actions = {};
+
+module.exports = conditions = {
+    defineActionType: function(_actionType) {
+        actionTypes = _actionType;
+    },
+    defineAction: function(actionId, action) {
+        actions[actionId] = action;
+    },
+    runAction: function(actionId) {
+        actions[actionId].run();
     }
-
-    function init() {
-//        addAction(Events.SOMEBODY_HOME, new SceneAction(Scenes.SomebodyHome));
-        addAction(Events.HOUSE_EMPTY, new SceneAction(Scenes.AllOff));
-        addAction(Events.BATHROOM_MOTION_ACTIVE, new LightAction(new Light("Toilet"), new Lights.OnLightCommand()));
-        addAction(Events.ENTRANCE_MOTION_ACTIVE, new SceneAction(Scenes.WelcomeHome));
-        addAction(
-            Events.ENTRANCE_MOTION_ACTIVE,
-            new DeviceAction("TV", new Devices.DeviceTogglePowerCommand()));
-        addAction(
-            Events.ENTRANCE_MOTION_ACTIVE,
-            new DeviceAction("Stereo", new Devices.DeviceTogglePowerCommand()));
-        addAction(
-            Events.ENTRANCE_MOTION_ACTIVE,
-            new DeviceAction("ATV", new Devices.DeviceSelectCommand()));
-        addAction(Events.ENTRANCE_MOTION_INACTIVE, new LightAction(Lights.EntranceGroup, new Lights.OffLightCommand()));
-        addAction(
-            Events.ENTRANCE_MOTION_INACTIVE,
-            new LightAction(new Light("Hallway"), new Lights.BrightnessLightCommand(40, 2)));
-
-
-        addAction(Events.CHRIS_ARRIVED_HOME, new StateUpdatingAction("chrisPhone", "state", "presence"));
-        addAction(Events.CHRIS_LEFT_HOME, new StateUpdatingAction("chrisPhone", "state", "presence"));
-        addAction(Events.SAMER_ARRIVED_HOME, new StateUpdatingAction("samerPhone", "state", "presence"));
-        addAction(Events.SAMER_LEFT_HOME, new StateUpdatingAction("samerPhone", "state", "presence"));
-        addAction(
-            Events.BATHROOM_ENTRANCE_MOTION_ACTIVE,
-            new LightAction(new Light("Bathtub"), new Lights.OnLightCommand()));
-    }
-
-    function addAction(eventId, action) {
-        var actions = ACTIONS[eventId];
-
-        actions = actions || [];
-        actions.push(action);
-
-        ACTIONS[eventId] = actions;
-    }
-
-    exports.init = init;
-    exports.runActionsForEvent = runActionsForEvent;
-})(exports);
+};
