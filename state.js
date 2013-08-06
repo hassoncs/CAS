@@ -22,6 +22,7 @@ var _ = require('underscore'),
     }
 
     function getState(thingId, stateId) {
+        stateId = stateId || "simpleState";
         var thing = things[thingId];
         var state = thing != null ? thing[stateId] : null;
         return state;

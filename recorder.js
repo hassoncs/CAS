@@ -9,17 +9,23 @@ var state = require('./state');
 var stateReactor = require('./stateReactor');
 var conditionRegistry = require('./conditions').conditionRegistry;
 
-module.exports = recorder = {
-    handleInput: function(input) {
-        var thingId = input.sensor;
-        if (!thingId) {
-            return;
-        }
-        logger.i("Recording input: " + util.inspect(input));
 
-        var stateId = "simpleState";
-        state.saveState(thingId, stateId, input.state);
-//        stateReactor.react(thingId, stateId);
-        conditionRegistry.runApplicableConditions();
+exports.handleInput = function(input, stateReactor) {
+    var thingId = input.sensor;
+    if (!thingId) {
+        return;
     }
+    logger.i("Recording input: " + util.inspect(input));
+
+    state.saveState(thingId, "simpleState", input.state);
+    state.saveState(thingId, "simpleStateUpdateTime", process.hrtime()[0]);
+    stateReactor.react(thingId, "simpleState", { recursions: 0 });
+
+    conditionRegistry.runApplicableConditions();
+};
+
+exports.handleStateUpdate = function(thingId, stateId, newValue) {
+    state.saveState(thingId, stateId, newValue);
+    stateReactor.react(thingId, stateId, { recursions: 0 });
+    conditionRegistry.runApplicableConditions();
 };

@@ -4,6 +4,7 @@ var Lights = require('./hueWrapper');
 var util = require('util');
 var logger = require('./logger');
 var actionRunner = require('./actionRunner');
+var stateReactor = require('./stateReactor');
 var Scenes = require('./scenes');
 var Facade = require('./facade');
 var LightAction = require('./action/actionDirectory.js').LightAction;
@@ -22,7 +23,7 @@ var SERVER_PORT = 11337;
 app.get('/', function(req, res) {
     var query = req.query;
 
-    recorder.handleInput(query);
+    recorder.handleInput(query, stateReactor);
 	res.send(view.render(query));
 });
 

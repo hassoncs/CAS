@@ -35,7 +35,7 @@ Condition.prototype.isSatisfied = function() {
     return passedCooldown;
 };
 Condition.prototype.runAction = function() {
-    logger.i("Condition satisfied, running action " + this.actionId);
+    logger.i("Condition is running action " + this.actionId);
     actionRunner.runAction(this.actionId);
     this.lastFiredTime = process.hrtime()[0]; // seconds
 };
@@ -53,6 +53,17 @@ SimpleStateCondition.prototype.isSatisfied = function() {
 };
 
 
+function ComputedStateTrueCondition(computedStateId) {
+    Condition.call(this, computedStateId);
+}
+ComputedStateTrueCondition.prototype = new Condition();
+ComputedStateTrueCondition.prototype.isSatisfied = function() {
+    var superConditionIsSatisfied = Condition.prototype.isSatisfied.call(this);
+    var currentState = state.getState(this.thingId, "computedState");
+    return superConditionIsSatisfied && !!currentState;
+};
+
+
 function ConditionRegistry() {
     this.conditions = [];
 }
@@ -60,11 +71,13 @@ ConditionRegistry.prototype.registerCondition = function(condition) {
     this.conditions.push(condition);
 };
 ConditionRegistry.prototype.runApplicableConditions = function() {
-    logger.i(util.format("Checking %d condition(s)", this.conditions.length));
-    _.each(this.conditions, function(condition) {
-        if (condition.isSatisfied()) {
-            condition.runAction();
-        }
+    var satisfiedConditions = _.filter(this.conditions, function(condition) {
+        return condition.isSatisfied();
+    });
+
+    logger.i(util.format("%d of %d condition(s) satisfied.", satisfiedConditions.length, this.conditions.length));
+    _.each(satisfiedConditions, function(condition) {
+        condition.runAction();
     });
 };
 
@@ -73,5 +86,6 @@ module.exports = conditions = {
     SimpleState: SimpleState,
     Condition: Condition,
     SimpleStateCondition: SimpleStateCondition,
+    ComputedStateTrueCondition: ComputedStateTrueCondition,
     conditionRegistry: theConditionRegistry
 };
