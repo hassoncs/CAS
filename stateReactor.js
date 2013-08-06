@@ -22,7 +22,8 @@ DependencyStateContext.prototype.get = function(thingId) {
     var contextSelf = this;
     return {
         is: function(simpleStateId) {
-            var stateMatches = (contextSelf.dependencyStates[thingId] == simpleStateId.toLowerCase());
+            var stateMatches = (contextSelf.dependencyStates[thingId] ==
+                (simpleStateId.slice(0,1).toLowerCase() + simpleStateId.slice(1)));
             return stateMatches;
         },
         value: function() {
@@ -57,10 +58,10 @@ ComputedStateReactor.prototype.react = function(recursiveData) {
 
     var currentValue = state.getState(this.computedStateId, "computedState");
     if (computedValue === null || currentValue === computedValue) {
-        logger.i("Reacted needlessly");
+        logger.i("Reactor tick");
         return;
     }
-    logger.i(util.format("Reactor reevaluating the value of %s, from %s => %s", this.computedStateId, currentValue, computedValue));
+    logger.i(util.format("Reactor Reevaluated '%s' from %s => %s", this.computedStateId, currentValue, computedValue));
     recorder.handleStateUpdate(this.computedStateId, "computedState", computedValue, copiedRecursiveData);
 }
 

@@ -219,6 +219,7 @@ var _ = require('underscore'),
         "Bathtub",
         "Toilet"]);
     exports.EntranceGroup = new LightGroup("entranceLights", ["Stairs Bottom", "Stairs Top"]);
+    exports.BathroomGroup = new LightGroup("bathroomLights", ["Toilet", "Bathtub"]);
 })(exports);
 
 
