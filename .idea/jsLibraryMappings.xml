@@ -2,6 +2,8 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="PROJECT" libraries="{Node.js v0.10.13 Core Modules}" />
+    <includedPredefinedLibrary name="Node.js Globals" />
+    <includedPredefinedLibrary name="WebGL" />
   </component>
 </project>
 
