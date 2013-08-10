@@ -79,7 +79,7 @@ exports.react = function(thingId, stateId, recursiveData) {
     });
 
     if (!reactedOnce) {
-        setTimeTimer();
+        //setTimeTimer();
         reactedOnce = true;
     }
 };
@@ -105,12 +105,11 @@ function reactToTime() {
     _.each(reactorsToNotifyWhenTimeChanges, function(reactor) {
         reactor.react({ recursions: 0 });
     });
-    setTimeTimer();
+    //setTimeTimer();
 };
 
 var timeTimer;
 function setTimeTimer() {
-    clearInterval(timeTimer);
-    timeTimer = setTimeout(reactToTime, 5000);
+    //clearInterval(timeTimer);
 };
-
+setInterval(reactToTime, 10000);

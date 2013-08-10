@@ -18,10 +18,6 @@ var Light = hue.Light;
         if (!_.isArray(lightActions)) {
             this.lightActions = [lightActions];
         }
-//        logger.i("Created Scene with lights:");
-//        _.each(lightActions, function(action) {
-//            logger.i(action.light.name);
-//        });
     }
     Scene.prototype.activate = function() {
         logger.i("Scene was activated.");
@@ -38,6 +34,16 @@ var Light = hue.Light;
     var allLightGroup = new LightGroup("all", [
         "Bedroom Main", "Bedroom Window", "Bedroom Spotlight",
         "Hallway", "Stairs Top", "Stairs Bottom", "Bathtub", "Toilet"
+    ]);
+
+    context.TurnOffHallwayLights = new Scene([
+        new LightAction(new Light("Stairs Top"), new OffLightCommand()),
+        new LightAction(new Light("Hallway"), new OffLightCommand()),
+    ]);
+
+    context.TurnOnHallwayLights = new Scene([
+        new LightAction(new Light("Stairs Top"), new ColorBrightnessLightCommand(Color.randomColorful(), 100, 0)),
+        new LightAction(new Light("Hallway"), new ColorBrightnessLightCommand(Color.randomColorful(), 100, 1)),
     ]);
 
     context.WelcomeHome = new Scene([
