@@ -108,6 +108,7 @@ ComputedState.SomeonesPhoneWifiConnected = genId();
 ComputedState.AllPhonesWifiNotPresent = genId();
 
 ComputedState.WelcomeFromAnEmptyHouse = genId();
+ComputedState.ComputedBrightnessLevel = genId();
 
 
 function initConfig() {
@@ -132,9 +133,8 @@ function initConfig() {
     defineComputedState(ComputedState.MotionInBathroom, [Things.BathroomMotion, Things.BathroomAeonMultisensor], strategy.SimpleStateOR(SimpleState.Active));
     defineComputedState(ComputedState.MotionNearBottomStairs, [Things.StairsMotion, Things.BedroomDoorMulti], strategy.SimpleStateOR(SimpleState.Active));
 
-    defineComputedTimeState(ComputedState.NobodyInHallway, [Things.StairsAeonMultisensor], strategy.TimeSinceStateChangeGreaterThan(SimpleState.Inactive, 5));
-    defineComputedTimeState(ComputedState.NobodyInTheBathroom, [Things.BathroomAeonMultisensor], strategy.TimeSinceStateChangeGreaterThan(SimpleState.Inactive, 5));
-    defineComputedTimeState(ComputedState.NobodyOnStairs, [Things.StairsAeonMultisensor], strategy.TimeSinceStateChangeGreaterThan(SimpleState.Inactive, 15));
+    defineComputedTimeState(ComputedState.NobodyInHallway, [Things.StairsAeonMultisensor], strategy.TimeSinceStateChangeGreaterThan(SimpleState.Inactive, 45));
+    defineComputedTimeState(ComputedState.NobodyInTheBathroom, [Things.BathroomAeonMultisensor], strategy.TimeSinceStateChangeGreaterThan(SimpleState.Inactive, 45));
 
     defineComputedTimeState(ComputedState.WelcomeFromAnEmptyHouse,
         [ComputedState.AllPhonesWifiNotPresent, ComputedState.SomebodyJustGotHome],
@@ -146,6 +146,19 @@ function initConfig() {
                 var stateOk = (dependencyStates.get(dependency).is(simpleStateToMatch));
                 return timeOk && stateOk;
             });
+        }
+    );
+
+    defineComputedTimeState(ComputedState.ComputedBrightnessLevel, [],
+        function(dependencyStates) {
+            var curTime = new Date();
+            var curHour = curTime.getHours();
+            /* Overnight */
+            if ((curHour > 0 && curHour < 7) || (curHour > 22)) {
+                return 1;
+            } else /*if ((curHour >= 7 && curHour < 20))*/ {
+                return 100;
+            }
         }
     );
 
@@ -162,8 +175,8 @@ function initConfig() {
     defineAction(Action.TurnOnStairBottomLight, new LightAction(new Light("Stairs Bottom"), new Lights.OnLightCommand()));
     defineAction(Action.TurnOffBottomLight, new LightAction(new Light("Stairs Bottom"), new Lights.OffLightCommand()));
     defineAction(Action.StartWelcomeSequence, new SceneAction(Scenes.WelcomeHome));
-    defineAction(Action.TurnOnBathtubLight, new LightAction(new Light("Bathtub"), new ColorBrightnessLightCommand(Color.randomColorful(), 100, 0)));
-    defineAction(Action.TurnOnToiletLight, new LightAction(new Light("Toilet"), new ColorBrightnessLightCommand(Color.randomColorful(), 100, 0)));
+    defineAction(Action.TurnOnBathtubLight, new LightAction(new Light("Bathtub"), new ColorBrightnessLightCommand(Color.randomColorful(), "ComputedBrightnessLevel", 0)));
+    defineAction(Action.TurnOnToiletLight, new LightAction(new Light("Toilet"), new ColorBrightnessLightCommand(Color.randomColorful(), "ComputedBrightnessLevel", 0)));
     defineAction(Action.TurnOffAllBathroom, new LightAction(Lights.BathroomGroup, new Lights.OffLightCommand()));
     defineAction(Action.TurnOffEverything, new SceneAction(Scenes.AllOff));
 

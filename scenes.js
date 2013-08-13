@@ -42,8 +42,8 @@ var Light = hue.Light;
     ]);
 
     context.TurnOnHallwayLights = new Scene([
-        new LightAction(new Light("Stairs Top"), new ColorBrightnessLightCommand(Color.randomColorful(), 100, 0)),
-        new LightAction(new Light("Hallway"), new ColorBrightnessLightCommand(Color.randomColorful(), 100, 1)),
+        new LightAction(new Light("Stairs Top"), new ColorBrightnessLightCommand(Color.randomColorful(), "ComputedBrightnessLevel", 0)),
+        new LightAction(new Light("Hallway"), new ColorBrightnessLightCommand(Color.randomColorful(), "ComputedBrightnessLevel", 1)),
     ]);
 
     context.WelcomeHome = new Scene([

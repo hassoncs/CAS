@@ -4,7 +4,8 @@ var _ = require('underscore'),
     hue = require("node-hue-api"),
     HueApi = hue.HueApi,
     LightState = hue.lightState,
-    logger = require('./logger');
+    logger = require('./logger'),
+    state = require('./state');
 
 (function(context) {
     var HUE_USER_NAME = "lalaautomationserver";
@@ -56,7 +57,7 @@ var _ = require('underscore'),
 
     function OnLightCommand(transition) {
         LightCommand.call(this);
-        this.transition = transition || 0;
+        this.transition = transition || 1;
     }
     OnLightCommand.prototype = new LightCommand();
     OnLightCommand.prototype.execute = function(lightId) {
@@ -71,7 +72,7 @@ var _ = require('underscore'),
 
     function OffLightCommand(transition) {
         LightCommand.call(this);
-        this.transition = transition || 0;
+        this.transition = transition || 1;
     }
     OffLightCommand.prototype = new LightCommand();
     OffLightCommand.prototype.execute = function(lightId) {
@@ -86,7 +87,7 @@ var _ = require('underscore'),
     function ColorLightCommand(color, transition) {
         LightCommand.call(this);
         this.color = color;
-        this.transition = transition || 0;
+        this.transition = transition || 1;
     }
     ColorLightCommand.prototype = new LightCommand();
     ColorLightCommand.prototype.execute = function(lightId) {
@@ -103,7 +104,7 @@ var _ = require('underscore'),
     function BrightnessLightCommand(brightness, transition) {
         LightCommand.call(this);
         this.brightness = brightness;
-        this.transition = transition || 0;
+        this.transition = transition || 1;
     }
     BrightnessLightCommand.prototype = new LightCommand();
     BrightnessLightCommand.prototype.execute = function(lightId) {
@@ -120,16 +121,21 @@ var _ = require('underscore'),
         LightCommand.call(this);
         this.color = color;
         this.brightness = brightness;
-        this.transition = transition || 0;
+        this.transition = transition || 1;
     }
     ColorBrightnessLightCommand.prototype = new LightCommand();
     ColorBrightnessLightCommand.prototype.execute = function(lightId) {
+        var brightness = this.brightness;
+        if (_.isString(brightness)) {
+            brightness = state.getComputedState(brightness);
+        }
+
         LightCommand.prototype.execute(lightId);
         hueApi
             .setLightState(lightId, LightState.create()
                 .on()
                 .rgb(this.color.r, this.color.g, this.color.b)
-                .brightness(this.brightness)
+                .brightness(brightness)
                 .transition(this.transition))
             .done();
     }

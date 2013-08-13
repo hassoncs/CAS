@@ -28,8 +28,16 @@ var _ = require('underscore'),
         return state;
     }
 
+    function getComputedState(thingId) {
+        var stateId = "computedState";
+        var thing = things[thingId];
+        var state = thing != null ? thing[stateId] : null;
+        return state;
+    }
+
     context.saveState = saveState;
     context.saveTime = saveTime;
     context.getState = getState;
+    context.getComputedState = getComputedState;
     context.things = things;
 })(exports);
